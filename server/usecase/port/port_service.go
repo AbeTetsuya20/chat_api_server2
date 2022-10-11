@@ -29,7 +29,6 @@ type ServiceRepository interface {
 type ServiceOutputPort interface {
 	GetUsersOutputPort([]entity.User)
 	ErrorOutputPort(error)
-
 	LoginUserOutputPort(bool, *entity.User)
 	SignUpUserOutputPort(bool)
 	EditProfileOutputPort(bool)

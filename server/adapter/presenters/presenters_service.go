@@ -55,6 +55,7 @@ func (s *ServiceOutput) GetUsersOutputPort(users []entity.User) {
 		log.Printf("[ERROR] response encoding failed: %+v", err)
 		entity.WriteHTTPError(s.w, http.StatusInternalServerError)
 	}
+
 }
 
 func (s *ServiceOutput) LoginUserOutputPort(success bool, user *entity.User) {
