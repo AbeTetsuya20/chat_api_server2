@@ -29,10 +29,9 @@ func (s *ServiceOutput) ErrorOutputPort(err error) {
 func (s *ServiceOutput) GetUsersOutputPort(users []entity.User) {
 
 	type getUser struct {
-		Name       string         `json:"name"`
-		ID         string         `json:"ID"`
-		Token      sql.NullString `json:"Token"`
-		ChatNumber int            `json:"chatNumber"`
+		Name       string `json:"name"`
+		ID         string `json:"ID"`
+		ChatNumber int    `json:"chatNumber"`
 	}
 
 	res := struct {
@@ -44,7 +43,6 @@ func (s *ServiceOutput) GetUsersOutputPort(users []entity.User) {
 		getUsers = append(getUsers, getUser{
 			Name:       e.Name,
 			ID:         e.ID,
-			Token:      e.Token,
 			ChatNumber: e.ChatNumber,
 		})
 	}
