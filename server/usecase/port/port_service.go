@@ -13,6 +13,7 @@ import (
 type ServiceInputPort interface {
 	GetUsersInputPort(context.Context)
 	LoginUserInputPort(context.Context)
+	SignUpUserInputPort(ctx context.Context)
 	EditProfileInputPort(context.Context)
 }
 
@@ -20,6 +21,7 @@ type ServiceInputPort interface {
 type ServiceRepository interface {
 	GetUsersRepository(context.Context) []entity.User
 	LoginUserRepository(context.Context) (bool, *entity.User)
+	SignUpUserRepository(ctx context.Context) bool
 	EditProfileRepository(ctx context.Context) bool
 }
 
@@ -29,5 +31,6 @@ type ServiceOutputPort interface {
 	ErrorOutputPort(error)
 
 	LoginUserOutputPort(bool, *entity.User)
+	SignUpUserOutputPort(bool)
 	EditProfileOutputPort(bool)
 }

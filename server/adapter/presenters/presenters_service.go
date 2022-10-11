@@ -6,7 +6,6 @@ package presenters
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"server/server/entity"
@@ -82,8 +81,19 @@ func (s *ServiceOutput) LoginUserOutputPort(success bool, user *entity.User) {
 }
 
 func (s *ServiceOutput) EditProfileOutputPort(success bool) {
+	res := struct {
+		Success bool `json:"success"`
+	}{
+		Success: success,
+	}
 
-	fmt.Println("結果:", success)
+	if err := json.NewEncoder(s.w).Encode(&res); err != nil {
+		log.Printf("[ERROR] response encoding failed: %+v", err)
+		entity.WriteHTTPError(s.w, http.StatusInternalServerError)
+	}
+}
+
+func (s *ServiceOutput) SignUpUserOutputPort(success bool) {
 	res := struct {
 		Success bool `json:"success"`
 	}{

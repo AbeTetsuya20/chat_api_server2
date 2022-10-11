@@ -39,3 +39,8 @@ func (s *ServiceInput) EditProfileInputPort(ctx context.Context) {
 	success := s.Repository.EditProfileRepository(ctx)
 	s.OutputPort.EditProfileOutputPort(success)
 }
+
+func (s *ServiceInput) SignUpUserInputPort(ctx context.Context) {
+	success := s.Repository.SignUpUserRepository(ctx)
+	s.OutputPort.SignUpUserOutputPort(success)
+}

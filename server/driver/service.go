@@ -59,6 +59,9 @@ func (s *ServiceDriver) ChatService(ctx context.Context) {
 		// GET: /api/users
 		r.Get("/users", s.Controller.GetUsers(ctx))
 
+		// GET: /api/signup/user
+		r.Get("/signup/user", s.Controller.SignUpUser(ctx))
+
 		r.Route("/login", func(r chi.Router) {
 			// GET: /api/login/user
 			r.Get("/user", s.Controller.LoginUser(ctx))

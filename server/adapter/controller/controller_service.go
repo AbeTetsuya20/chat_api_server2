@@ -61,3 +61,11 @@ func (s *ServiceController) EditProfile(ctx context.Context) func(w http.Respons
 
 	return handleFunc
 }
+
+func (s *ServiceController) SignUpUser(ctx context.Context) func(w http.ResponseWriter, r *http.Request) {
+	handleFunc := func(w http.ResponseWriter, r *http.Request) {
+		s.newInputPort(w, r).SignUpUserInputPort(ctx)
+	}
+
+	return handleFunc
+}

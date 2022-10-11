@@ -151,3 +151,57 @@ func (s ServiceRepo) EditProfileRepository(ctx context.Context) bool {
 
 	return true
 }
+
+func (s ServiceRepo) SignUpUserRepository(ctx context.Context) bool {
+	// header を取得
+	headerName := s.r.Header.Get("name")
+	headerAddress := s.r.Header.Get("address")
+	headerPassword := s.r.Header.Get("password")
+
+	if headerName == "" || headerAddress == "" || headerPassword == "" {
+		log.Printf("[ERROR] can't login: 情報が足りません。header に 名前、アドレス、パスワードがあることを確認してください。")
+		return false
+	}
+
+	// address が以前登録されたものと一致しないか確認
+	query := "select count(*) from user where address = ?"
+	rows, err := s.conn.QueryContext(ctx, query, headerAddress)
+
+	if err != nil {
+		log.Printf("[ERROR] not found User: %+v", err)
+		return false
+	}
+
+	// count が 0 でない場合 false
+	var count int
+	for rows.Next() {
+		if err := rows.Scan(&count); err != nil {
+			log.Printf("[ERROR] scan user: %+v", err)
+			return false
+		}
+	}
+	if count != 0 {
+		log.Printf("[ERROR] address is already registered")
+		return false
+	}
+
+	// id を生成
+	userID := "user_" + entity.RandomWithCharset(3)
+
+	// ユーザー登録
+	query2 := "INSERT INTO user (id, name, address, status, password, chat_number, token, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?) "
+	_, err = s.conn.ExecContext(ctx, query2, userID, headerName, headerAddress, "online", headerPassword, 0, "", s.now(), s.now())
+	if err != nil {
+		log.Printf("[ERROR] Insert: %+v", err)
+		return false
+	}
+
+	query3 := "INSERT INTO User_Profile (id,Comment ,Friend_ID ,created_at ,updated_at) VALUES (?,?,?,?,?) "
+	_, err = s.conn.ExecContext(ctx, query3, userID, "こんにちは！", "test_1234", s.now(), s.now())
+	if err != nil {
+		log.Printf("[ERROR] Insert: %+v", err)
+		return false
+	}
+
+	return true
+}
