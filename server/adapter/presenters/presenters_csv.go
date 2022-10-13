@@ -4,41 +4,34 @@
 package presenters
 
 import (
+	"fmt"
 	"server/server/entity"
 	"server/server/usecase/port"
 )
 
 type CSVOutput struct {
-	csvPath string
 }
 
 func (C CSVOutput) GetUsersOutputPort(users []entity.User) {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("csv 出力をする")
 }
 
 func (C CSVOutput) ErrorOutputPort(err error) {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("csv 出力をする")
 }
 
 func (C CSVOutput) LoginUserOutputPort(b bool, user *entity.User) {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("csv 出力をする")
 }
 
 func (C CSVOutput) SignUpUserOutputPort(b bool) {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("csv 出力をする")
 }
 
 func (C CSVOutput) EditProfileOutputPort(b bool) {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("csv 出力をする")
 }
 
-func NewCSVOutputPort(path string) port.ServiceOutputPort {
-	return &CSVOutput{
-		csvPath: path,
-	}
+func NewCSVOutputPort() port.ServiceOutputPort {
+	return &CSVOutput{}
 }

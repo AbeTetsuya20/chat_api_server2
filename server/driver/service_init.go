@@ -18,8 +18,8 @@ func InitDriver(con *sql.DB) (Service, error) {
 }
 
 func NewOutputFactory() controller.OutputFactory {
-	return presenters.NewServiceOutputPort
-	//return presenters.NewCSVOutputPort
+	//return presenters.NewServiceOutputPort
+	return presenters.NewCSVOutputPort
 }
 
 func NewInputFactory() controller.InputFactory {

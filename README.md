@@ -48,7 +48,7 @@ curl http://localhost:1001/api/users
 
 - 実行例
 ```shell
-curl -H 'name:name3' -H 'address:tmp@tmp.com' http://localhost:1001/api/signup
+curl -H 'name:name3' -H 'address:tmp@tmp.com' -H 'password:tmp' http://localhost:1001/api/signup/user
 ```
 
 - 期待される結果
