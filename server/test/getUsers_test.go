@@ -16,13 +16,13 @@ package test
 //)
 //
 //type ServiceInputMock struct {
-//	OutputPort port.ServiceOutputPort
+//	GatewayPort port.ServiceOutputPort
 //	Repository port.ServiceRepository
 //}
 //
 //func (s *ServiceInputMock) GetUsersInputPort(ctx context.Context) {
 //	users := s.Repository.GetUsersRepository(ctx)
-//	s.OutputPort.GetUsersOutputPort(users)
+//	s.GatewayPort.GetUsersOutputPort(users)
 //}
 //
 //type ServiceRepositoryMock struct {

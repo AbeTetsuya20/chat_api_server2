@@ -28,20 +28,20 @@ func NewServiceRepository(now func() time.Time, r *http.Request, conn *sql.DB) p
 	}
 }
 
-func ScanUsers(rows *sql.Rows) ([]entity.User, int, error) {
-	users := make([]entity.User, 0)
-
-	for rows.Next() {
-		var v entity.User
-		if err := rows.Scan(&v.ID, &v.Name, &v.Address, &v.Status, &v.Password, &v.ChatNumber, &v.Token, &v.CreatedAT, &v.UpdatedAt); err != nil {
-			log.Printf("[ERROR] scan user: %+v", err)
-			return nil, 0, err
-		}
-		users = append(users, v)
-	}
-
-	return users, len(users), nil
-}
+//func ScanUsers(rows *sql.Rows) ([]entity.User, int, error) {
+//	users := make([]entity.User, 0)
+//
+//	for rows.Next() {
+//		var v entity.User
+//		if err := rows.Scan(&v.ID, &v.Name, &v.Address, &v.Status, &v.Password, &v.ChatNumber, &v.Token, &v.CreatedAT, &v.UpdatedAt); err != nil {
+//			log.Printf("[ERROR] scan user: %+v", err)
+//			return nil, 0, err
+//		}
+//		users = append(users, v)
+//	}
+//
+//	return users, len(users), nil
+//}
 
 func (s ServiceRepo) GetUsersRepository(ctx context.Context) []entity.User {
 	query := "SELECT * FROM user"

@@ -13,33 +13,42 @@ import (
 )
 
 type ServiceController struct {
-	InputFactory func(o port.ServiceOutputPort, u port.ServiceRepository) port.ServiceInputPort
-	RepoFactory  func(now func() time.Time, r *http.Request, c *sql.DB) port.ServiceRepository
-	//OutputFactory func(w http.ResponseWriter) port.ServiceOutputPort
-	OutputFactory func() port.ServiceOutputPort
+	InputFactory     func(o port.ServiceOutputPort, u port.ServiceRepository, inputPort port.DBInputPort, outputPort port.DBGatewayPort) port.ServiceInputPort
+	RepoFactory      func(now func() time.Time, r *http.Request, c *sql.DB) port.ServiceRepository
+	DBInputFactory   func(o port.DBGatewayPort) port.DBInputPort
+	DBGatewayFactory func(c *sql.DB) port.DBGatewayPort
+	OutputFactory    func(w http.ResponseWriter) port.ServiceOutputPort
+	//OutputFactory func() port.ServiceOutputPort
 
 	Conn *sql.DB
 }
 
-type InputFactory func(o port.ServiceOutputPort, u port.ServiceRepository) port.ServiceInputPort
+type InputFactory func(o port.ServiceOutputPort, u port.ServiceRepository, inputPort port.DBInputPort, outputPort port.DBGatewayPort) port.ServiceInputPort
 type Repository func(now func() time.Time, r *http.Request, c *sql.DB) port.ServiceRepository
+type DBInputFactory func(o port.DBGatewayPort) port.DBInputPort
+type DBGatewayFactory func(c *sql.DB) port.DBGatewayPort
 
-//type OutputFactory func(w http.ResponseWriter) port.ServiceOutputPort
-type OutputFactory func() port.ServiceOutputPort
+type OutputFactory func(w http.ResponseWriter) port.ServiceOutputPort
 
-func NewServiceController(inputFactory InputFactory, repository Repository, outputFactory OutputFactory, conn *sql.DB) *ServiceController {
+//type OutputFactory func() port.ServiceOutputPort
+
+func NewServiceController(inputFactory InputFactory, dbInputFactory DBInputFactory, dbOutputFactory DBGatewayFactory, repository Repository, outputFactory OutputFactory, conn *sql.DB) *ServiceController {
 	return &ServiceController{
-		InputFactory:  inputFactory,
-		RepoFactory:   repository,
-		OutputFactory: outputFactory,
-		Conn:          conn,
+		InputFactory:     inputFactory,
+		RepoFactory:      repository,
+		OutputFactory:    outputFactory,
+		DBInputFactory:   dbInputFactory,
+		DBGatewayFactory: dbOutputFactory,
+		Conn:             conn,
 	}
 }
 
 func (s *ServiceController) NewInputPort(w http.ResponseWriter, r *http.Request) port.ServiceInputPort {
-	outputPort := s.OutputFactory()
+	outputPort := s.OutputFactory(w)
 	repository := s.RepoFactory(time.Now, r, s.Conn)
-	return s.InputFactory(outputPort, repository)
+	dbOutput := s.DBGatewayFactory(s.Conn)
+	dbInput := s.DBInputFactory(dbOutput)
+	return s.InputFactory(outputPort, repository, dbInput, dbOutput)
 }
 
 //func (s *ServiceController) NewInputPort(w http.ResponseWriter, r *http.Request) port.ServiceInputPort {

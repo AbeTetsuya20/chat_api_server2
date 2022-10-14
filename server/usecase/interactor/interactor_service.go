@@ -10,21 +10,26 @@ import (
 )
 
 type ServiceInput struct {
-	OutputPort port.ServiceOutputPort
-	Repository port.ServiceRepository
+	OutputPort   port.ServiceOutputPort
+	Repository   port.ServiceRepository
+	DBInputPort  port.DBInputPort
+	DBOutputPort port.DBGatewayPort
 }
 
-func NewServiceInputPort(outputPort port.ServiceOutputPort, userRepository port.ServiceRepository) port.ServiceInputPort {
+func NewServiceInputPort(outputPort port.ServiceOutputPort, userRepository port.ServiceRepository, inputPort port.DBInputPort, dbOutputPort port.DBGatewayPort) port.ServiceInputPort {
 	return &ServiceInput{
-		OutputPort: outputPort,
-		Repository: userRepository,
+		OutputPort:   outputPort,
+		Repository:   userRepository,
+		DBInputPort:  inputPort,
+		DBOutputPort: dbOutputPort,
 	}
 }
 
 // User を取得する抽象度が高い関数
 // repo から User を取得 -> output port に渡す
 func (s *ServiceInput) GetUsersInputPort(ctx context.Context) {
-	users := s.Repository.GetUsersRepository(ctx)
+	//users := s.Repository.GetUsersRepository(ctx)
+	users := s.DBInputPort.GetUsersRepositoryInput(ctx)
 	s.OutputPort.GetUsersOutputPort(users)
 }
 

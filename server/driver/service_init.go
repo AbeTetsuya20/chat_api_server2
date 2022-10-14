@@ -12,14 +12,26 @@ func InitDriver(con *sql.DB) (Service, error) {
 	outputFactory := NewOutputFactory()
 	inputFactory := NewInputFactory()
 	repositoryFactory := NewRepositoryFactory()
-	user := controller.NewServiceController(inputFactory, repositoryFactory, outputFactory, con)
+
+	dbInputPort := NewDBInputFactory()
+	dbOutputPort := NewDBGatewayFactory()
+
+	user := controller.NewServiceController(inputFactory, dbInputPort, dbOutputPort, repositoryFactory, outputFactory, con)
 	driversUser := NewServiceDriver(user)
 	return driversUser, nil
 }
 
+func NewDBInputFactory() controller.DBInputFactory {
+	return interactor.NewDBInput
+}
+
+func NewDBGatewayFactory() controller.DBGatewayFactory {
+	return gateway.NewDBGatewayPort
+}
+
 func NewOutputFactory() controller.OutputFactory {
-	//return presenters.NewServiceOutputPort
-	return presenters.NewCSVOutputPort
+	return presenters.NewServiceOutputPort
+	//return presenters.NewCSVOutputPort
 }
 
 func NewInputFactory() controller.InputFactory {

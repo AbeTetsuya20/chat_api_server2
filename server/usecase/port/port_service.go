@@ -17,7 +17,6 @@ type ServiceInputPort interface {
 	EditProfileInputPort(context.Context)
 }
 
-// 2. 情報を処理する
 type ServiceRepository interface {
 	GetUsersRepository(context.Context) []entity.User
 	LoginUserRepository(context.Context) (bool, *entity.User)
